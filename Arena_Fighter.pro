@@ -13,16 +13,26 @@ CONFIG(debug, debug|release){
 }
 
 SOURCES += \
+    Components/animationcomponent.cpp \
+    Components/movementcomponent.cpp \
     Entities/entity.cpp \
-        Game.cpp \
-        States/gamestate.cpp \
-        States/state.cpp \
-        main.cpp \
+    Entities/player.cpp \
+    Resource_Files/button.cpp \
+    Source_Files/Game.cpp \
+    States/gamestate.cpp \
+    States/mainmenustate.cpp \
+    States/state.cpp \
+    Source_Files/main.cpp \
 
 
 HEADERS += \
+    Components/animationcomponent.h \
+    Components/movementcomponent.h \
     Entities/entity.h \
+    Entities/player.h \
+    Resource_Files/button.h \
     States/gamestate.h \
+    States/mainmenustate.h \
     States/state.h \
-    game.h \
+    Source_Files/game.h \
 
