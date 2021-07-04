@@ -1,8 +1,11 @@
+#include "Source_Files/precompiled_header.h"
 #include "entity.h"
 
 void Entity::initVariables()
 {
+    this->hitboxComponent = NULL;
     this->movementComponent = NULL;
+    this->animationComponent = NULL;
 }
 
 //Constructors/Destructors
@@ -13,6 +16,7 @@ Entity::Entity()
 
 Entity::~Entity()
 {
+    delete this->hitboxComponent;
     delete this->movementComponent;
     delete this->animationComponent;
 }
@@ -21,6 +25,13 @@ Entity::~Entity()
 void Entity::setTexture(sf::Texture &texture)
 {
     this->sprite.setTexture(texture);
+}
+
+void Entity::createHitboxComponent(sf::Sprite &sprite,
+                                   const float offset_x, const float offset_y,
+                                   const float width, const float height)
+{
+    this->hitboxComponent = new HitboxComponent(sprite, offset_x, offset_y, width, height);
 }
 
 void Entity::createMovementComponent(const float maxVelocity, const float acceleration, const float deceleration)
@@ -53,7 +64,12 @@ void Entity::update(const float &dt)
 
 }
 
-void Entity::render(sf::RenderTarget *target)
+void Entity::render(sf::RenderTarget &target)
 {
-    target->draw(this->sprite);
+    target.draw(this->sprite);
+
+    if(this->hitboxComponent)
+    {
+        this->hitboxComponent->render(target);
+    }
 }

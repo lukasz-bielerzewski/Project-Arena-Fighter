@@ -1,3 +1,4 @@
+#include "Source_Files/precompiled_header.h"
 #include "mainmenustate.h"
 
 //Initialzer functions
@@ -12,7 +13,7 @@ void MainMenuState::initBackground()
           (static_cast<float>(this->window->getSize().x),
           static_cast<float>(this->window->getSize().y)));
 
-    if(!this->backgroundTexture.loadFromFile("Resources/Images/Backgrounds/placeholder_background.jpg"))
+    if(!this->backgroundTexture.loadFromFile("Resources/Images/Backgrounds/menu_background.jpg"))
     {
         throw"ERROR::MAIN_MENU_STATE::FAILED_TO_LOAD_BACKGROUND_TEXTURE";
     }
@@ -22,7 +23,7 @@ void MainMenuState::initBackground()
 
 void MainMenuState::initFonts()
 {
-    if(!this->font.loadFromFile("Fonts/PressStart2P-Regular.ttf"))
+    if(!this->font.loadFromFile("Resources/Fonts/PressStart2P-Regular.ttf"))
     {
         throw("ERROR::MAIN_MENU_STATE::COULD_NOT_LOAD_FONT");
     }
@@ -48,30 +49,38 @@ void MainMenuState::initKeybinds()
 
 void MainMenuState::initButtons()
 {
-    this->buttons["SINGLE_PLAYER_MODE"] = new Button(200, 425, 350, 70,
-        &this->font, "Single player mode", 14,
-        sf::Color(240, 240, 240, 255), sf::Color(255, 255, 255, 255), sf::Color(100, 100, 100, 255),
-        sf::Color(70, 70, 70, 200), sf::Color(150, 150, 250, 255), sf::Color(20, 20, 20, 200));
+    this->buttons["SINGLE_PLAYER_MODE"] = new gui::Button(
+                200.f, 425.f, 350.f, 70.f,
+                &this->font, "Single player mode", 14,
+                sf::Color(240, 240, 240, 255), sf::Color(255, 255, 255, 255), sf::Color(100, 100, 100, 255),
+                sf::Color(70, 70, 70, 200), sf::Color(150, 150, 250, 255), sf::Color(20, 20, 20, 200)
+                );
 
-    this->buttons["MULTIPLAYER_MODE"] = new Button(200, 550, 350, 70,
-        &this->font, "Multiplayer mode", 14,
-        sf::Color(240, 240, 240, 255), sf::Color(255, 255, 255, 255), sf::Color(100, 100, 100, 255),
-        sf::Color(70, 70, 70, 200), sf::Color(150, 150, 250, 255), sf::Color(20, 20, 20, 200));
+    this->buttons["MULTIPLAYER_MODE"] = new gui::Button(
+                200.f, 550.f, 350.f, 70.f,
+                &this->font, "Multiplayer mode", 14,
+                sf::Color(240, 240, 240, 255), sf::Color(255, 255, 255, 255), sf::Color(100, 100, 100, 255),
+                sf::Color(70, 70, 70, 200), sf::Color(150, 150, 250, 255), sf::Color(20, 20, 20, 200)
+                );
 
-    this->buttons["SETTINGS"] = new Button(200, 675, 350, 70,
-        &this->font, "Settings", 14,
-        sf::Color(240, 240, 240, 255), sf::Color(255, 255, 255, 255), sf::Color(100, 100, 100, 255),
-        sf::Color(70, 70, 70, 200), sf::Color(150, 150, 250, 255), sf::Color(20, 20, 20, 200));
+    this->buttons["SETTINGS"] = new gui::Button(
+                200.f, 675.f, 350.f, 70.f,
+                &this->font, "Settings", 14,
+                sf::Color(240, 240, 240, 255), sf::Color(255, 255, 255, 255), sf::Color(100, 100, 100, 255),
+                sf::Color(70, 70, 70, 200), sf::Color(150, 150, 250, 255), sf::Color(20, 20, 20, 200)
+                );
 
-    this->buttons["EXIT_STATE"] = new Button(200, 825, 350, 70,
-        &this->font, "Quit Game", 14,
-        sf::Color(240, 240, 240, 255), sf::Color(255, 255, 255, 255), sf::Color(100, 100, 100, 255),
-        sf::Color(70, 70, 70, 200), sf::Color(150, 150, 250, 255), sf::Color(20, 20, 20, 200));
+    this->buttons["EXIT_STATE"] = new gui::Button(
+                200.f, 825.f, 350.f, 70.f,
+                &this->font, "Quit Game", 14,
+                sf::Color(240, 240, 240, 255), sf::Color(255, 255, 255, 255), sf::Color(100, 100, 100, 255),
+                sf::Color(70, 70, 70, 200), sf::Color(150, 150, 250, 255), sf::Color(20, 20, 20, 200)
+                );
 }
 
-//Constructors/Destructors
-MainMenuState::MainMenuState(sf::RenderWindow *window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states)
-    : State(window, supportedKeys, states)
+//Constructors / Destructors
+MainMenuState::MainMenuState(StateData *state_data)
+    : State(state_data)
 {
     this->initVariables();
     this->initBackground();
@@ -106,7 +115,7 @@ void MainMenuState::updateButtons()
     //Single player mode
     if(this->buttons["SINGLE_PLAYER_MODE"]->isPressed())
     {
-        this->states->push(new GameState(this->window, this->supportedKeys, this->states));
+        this->states->push(new GameState(this->stateData));
     }
 
     //Multiplayer mode
@@ -118,7 +127,7 @@ void MainMenuState::updateButtons()
     //Settings
     if(this->buttons["SETTINGS"]->isPressed())
     {
-        //this->states->push(new GameState(this->window, this->supportedKeys, this->states));
+        this->states->push(new SettingsState(this->stateData));
     }
 
     //Quit the game
@@ -136,7 +145,7 @@ void MainMenuState::update(const float &dt)
     this->updateButtons();
 }
 
-void MainMenuState::renderButtons(sf::RenderTarget *target)
+void MainMenuState::renderButtons(sf::RenderTarget &target)
 {
     for(auto &it : this->buttons)
     {
@@ -152,16 +161,16 @@ void MainMenuState::render(sf::RenderTarget *target)
     }
     target->draw(this->background);
 
-    this->renderButtons(target);
+    this->renderButtons(*target);
 
-    //To be removed later!
-    sf::Text mouseText;
-    mouseText.setPosition(this->mousePosView.x + 10.f, this->mousePosView.y);
-    mouseText.setFont(this->font);
-    mouseText.setCharacterSize(10);
-    std::stringstream ss;
-    ss << this->mousePosView.x << " " << this->mousePosView.y;
-    mouseText.setString(ss.str());
+    //Tool for positioning buttons, to be removed later!
+//    sf::Text mouseText;
+//    mouseText.setPosition(this->mousePosView.x + 10.f, this->mousePosView.y);
+//    mouseText.setFont(this->font);
+//    mouseText.setCharacterSize(10);
+//    std::stringstream ss;
+//    ss << this->mousePosView.x << " " << this->mousePosView.y;
+//    mouseText.setString(ss.str());
 
-    target->draw(mouseText);
+//    target->draw(mouseText);
 }

@@ -1,3 +1,4 @@
+#include "Source_Files/precompiled_header.h"
 #include "movementcomponent.h"
 
 //Constructors / Destructors
@@ -14,19 +15,102 @@ MovementComponent::~MovementComponent()
 }
 
 //Accessors
+const float &MovementComponent::getMaxVelovity() const
+{
+    return this->maxVelocity;
+}
+
 const sf::Vector2f &MovementComponent::getVelocity() const
 {
     return this->velocity;
 }
 
 //Functions
-bool MovementComponent::idle() const
+bool MovementComponent::getState(const unsigned short state) const
 {
-    if(this->velocity.x == 0.f && this->velocity.y == 0.f)
+    switch(state)
     {
-        return true;
-    }
+    case IDLE:
+    {
+        if(this->velocity.x == 0.f && this->velocity.y == 0.f)
+        {
+            return true;
+        }
 
+        break;
+    }
+    case MOVING:
+    {
+        if(this->velocity.x != 0.f || this->velocity.y != 0.f)
+        {
+            return true;
+        }
+
+        break;
+    }
+    case MOVING_LEFT:
+    {
+        if(this->velocity.x < 0.f)
+        {
+            return true;
+        }
+
+        break;
+    }
+    case MOVING_RIGHT:
+    {
+        if(this->velocity.x > 0.f)
+        {
+            return true;
+        }
+
+        break;
+    }
+    case BLOCKING:
+    {
+        break;
+    }
+    case JUMPING_UP:
+    {
+        //testing
+        if(this->velocity.y < 0.f)
+        {
+            return true;
+        }
+
+        break;
+    }
+    case JUMPING_LEFT:
+    {
+        break;
+    }
+    case JUMPING_RIGHT:
+    {
+        break;
+    }
+    case CROUCHING:
+    {
+        //testing
+        if(this->velocity.y > 0.f)
+        {
+            return true;
+        }
+
+        break;
+    }
+    case CROUCHING_LEFT:
+    {
+        break;
+    }
+    case CROUCHING_RIGHT:
+    {
+        break;
+    }
+    case CROUCH_BLOCKING:
+    {
+        break;
+    }
+    }
     return false;
 }
 

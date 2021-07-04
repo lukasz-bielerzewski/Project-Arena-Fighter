@@ -2,6 +2,7 @@ TEMPLATE = app
 CONFIG += console c++17
 CONFIG -= app_bundle
 CONFIG -= qt
+CONFIG   += console precompile_header
 
 INCLUDEPATH += "C:/SFML-2.5.1/include"
 
@@ -12,27 +13,40 @@ CONFIG(debug, debug|release){
     LIBS += -lsfml-audio -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window
 }
 
+PRECOMPILED_HEADER = Source_Files/precompiled_header.h
+
 SOURCES += \
     Components/animationcomponent.cpp \
+    Components/hitboxcomponent.cpp \
     Components/movementcomponent.cpp \
     Entities/entity.cpp \
     Entities/player.cpp \
-    Resource_Files/button.cpp \
+    GUI/pausemenu.cpp \
+    Map/map.cpp \
+    Resource_Files/Gui.cpp \
+    Resource_Files/graphicssettings.cpp \
     Source_Files/Game.cpp \
     States/gamestate.cpp \
     States/mainmenustate.cpp \
+    States/settingsstate.cpp \
     States/state.cpp \
-    Source_Files/main.cpp \
+    Source_Files/main.cpp
 
 
 HEADERS += \
     Components/animationcomponent.h \
+    Components/hitboxcomponent.h \
     Components/movementcomponent.h \
     Entities/entity.h \
     Entities/player.h \
-    Resource_Files/button.h \
+    GUI/pausemenu.h \
+    Map/map.h \
+    Resource_Files/Gui.h \
+    Resource_Files/graphicssettings.h \
+    Source_Files/precompiled_header.h \
     States/gamestate.h \
     States/mainmenustate.h \
+    States/settingsstate.h \
     States/state.h \
-    Source_Files/game.h \
+    Source_Files/game.h
 
